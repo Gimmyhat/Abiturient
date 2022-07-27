@@ -10,7 +10,7 @@ if __name__ == '__main__':
                       'Chrome/103.0.0.0 Safari/537.36',
         "Connection": "keep-alive"
     }
-    SNILS_KSENIYA = '160-073-321 17'
+    SNILS_KSENIYA = '160-073-321 17'  # СНИЛС
     SCORE_KSENIYA = 230
 
     dict_spec = {

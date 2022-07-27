@@ -21,7 +21,7 @@ def count_hi_score(dict_: dict):
 if __name__ == '__main__':
 
     URL = 'https://isu.ru/Abitur/rating/main/'
-    SNILS_KSENIYA = '160-073-321 17'
+    SNILS_KSENIYA = '160-073-321 17'  # СНИЛС
     SCORE_KSENIYA = 230
 
     options = Options()
