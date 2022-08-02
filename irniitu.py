@@ -10,8 +10,6 @@ if __name__ == '__main__':
                       'Chrome/103.0.0.0 Safari/537.36',
         "Connection": "keep-alive"
     }
-    SNILS_KSENIYA = '160-073-321 17'  # СНИЛС
-    SCORE_KSENIYA = 230
 
     dict_spec = {
         'Информатика и вычислительная техника': '23825',
@@ -19,23 +17,19 @@ if __name__ == '__main__':
         'Информационные системы и технологии': '23823',
     }
 
-    uniq_snils = set()
     for spec, link in dict_spec.items():
         resp = requests.get(f'{BASE_URL}{link}')
         soup = BeautifulSoup(resp.text, 'lxml')
-        tables = soup.find_all('table', {'class': 'rating'})[1].find_all('td')
+        elem = soup.select_one('body > div:nth-child(2) > div > div.col-12.col-md-9 > div:nth-child(1) > table')
+        content = pd.read_html(str(elem))
+        content = pd.DataFrame(content[0])
+        content.columns = ['П.п.',
+                           'Абитуриент',
+                           'Вступительные испытания',
+                           'Суммарный балл',
+                           'Приоритет',
+                           'Согласие на зачисление',
+                           'Подлинник документа об образовании']
+        table = pd.DataFrame(content)
+        table.to_excel(f'Списки ИРНИИТУ {spec}.xlsx', index=False)
 
-        snils = (x.text.replace('СНИЛС: ', '') for i, x in enumerate(tables)
-                 if i in range(1, len(tables) * 6 + 1, 6))
-        score = (int(x.text) for i, x in enumerate(tables)
-                 if x.text and (i in range(3, len(tables) * 6 + 1, 6)))
-
-        snils_score = set(zip(snils, score))
-        uniq_snils.update(snils_score)
-
-    result_list = [x for x in uniq_snils if x[1] >= SCORE_KSENIYA and x[0] != SNILS_KSENIYA]
-    print(result_list)
-    print(len(result_list))
-
-    df = pd.DataFrame(result_list)
-    df.to_excel('C:/Users/Sasha/Downloads/list_abitur_irniitu.xlsx')
